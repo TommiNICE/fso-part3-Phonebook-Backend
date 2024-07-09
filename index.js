@@ -79,9 +79,9 @@ app.delete('/api/persons/:id', (req, res, next) => {
    .catch(error => next(error))
 })
 
-app.post('/api/persons', (req, res) => {
+app.post('/api/persons', (req, res, next) => {
   const body = req.body
-  if (body.name === undefined) {
+/*   if (body.name === undefined) {
     return res.status(400).json({ error: 'content missing' })
   } else {
     if (!body.name) {
@@ -89,7 +89,7 @@ app.post('/api/persons', (req, res) => {
     }
     if (!body.number) {
       return res.status(400).json({ error: 'number missing' })
-    }
+    } */
     const person = new Person({
       name: body.name,
       number: body.number
@@ -97,7 +97,7 @@ app.post('/api/persons', (req, res) => {
     person.save().then(savedPerson => {
       res.json(savedPerson)
     })
-  }
+   .catch(error => next(error))
 })
 
 app.put('/api/persons/:id', (req, res, next) => {
