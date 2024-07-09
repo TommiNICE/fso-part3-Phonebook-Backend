@@ -17,6 +17,16 @@ const requestLogger = (request, response, next) => {
   next()
 }
 
+const errorHandler = (error, request, response, next) => {
+  console.error(error.message)
+
+  if (error.name === 'CastError') {
+    return response.status(400).send({ error: 'malformatted id' })
+  }
+
+  next(error)
+}
+
 const cors = require('cors')
 
 app.use(cors())
@@ -55,10 +65,16 @@ app.get('/api/persons/:id', (req, res) => {
   })
 })
 
-app.delete('/api/persons/:id', (req, res) => {
-  const id = req.params.id
-  persons = persons.filter(person => person.id !== id)
-  res.status(204).end()
+app.delete('/api/persons/:id', (req, res, next) => {
+  Person.findByIdAndDelete(req.params.id)
+   .then(result => {
+      if (result) {
+        res.status(204).end()
+      } else {
+        res.status(404).end()
+      }
+    })
+   .catch(error => next(error))
 })
 
 app.post('/api/persons', (req, res) => {
