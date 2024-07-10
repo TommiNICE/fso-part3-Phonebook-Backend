@@ -81,23 +81,14 @@ app.delete('/api/persons/:id', (req, res, next) => {
 
 app.post('/api/persons', (req, res, next) => {
   const body = req.body
-/*   if (body.name === undefined) {
-    return res.status(400).json({ error: 'content missing' })
-  } else {
-    if (!body.name) {
-      return res.status(400).json({ error: 'name missing' })
-    }
-    if (!body.number) {
-      return res.status(400).json({ error: 'number missing' })
-    } */
-    const person = new Person({
-      name: body.name,
-      number: body.number
-    })
-    person.save().then(savedPerson => {
-      res.json(savedPerson)
-    })
-   .catch(error => next(error))
+  const person = new Person({
+    name: body.name,
+    number: body.number
+  })
+  person.save().then(savedPerson => {
+    res.json(savedPerson)
+  })
+  .catch(error => next(error))
 })
 
 app.put('/api/persons/:id', (req, res, next) => {
